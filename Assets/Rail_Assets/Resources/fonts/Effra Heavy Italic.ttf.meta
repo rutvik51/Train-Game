@@ -1,0 +1,26 @@
+fileFormatVersion: 2
+guid: e0f3d90928186624ba4a160aee4ed9a0
+timeCreated: 1729516523
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  externalObjects: {}
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Effra Heavy
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 92fef1fc4b6f74f44bbcccfe8b576c65, type: 3}
+  customCharacters:
+  fontRenderingMode: 0
+  output:
+    hasEmptyFontData: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData:
+  assetBundleName:
+  assetBundleVariant:
