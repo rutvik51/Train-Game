@@ -22,7 +22,7 @@ public class Train : MonoBehaviour
 
     void Update()
     {
-        if (!isFollow) return;
+        // if (!isFollow) return;
         // Check if the splineFollower or its spline is null
         if (splineFollower == null || splineFollower.spline == null)
         {
@@ -40,29 +40,32 @@ public class Train : MonoBehaviour
         // Get the current position on the spline for the train
         float trainPosition = (float)splineFollower.result.percent;
 
+        // Ensure the train starts from the beginning of the spline
+        if (trainPosition == 1.0f)
+        {
+            trainPosition = 0.0f; // Start from the beginning of the spline
+        }
+
+        float splineLength = splineFollower.spline.CalculateLength();
+
         for (int i = 0; i < coaches.Length; i++)
         {
-            float offsetPercent;
-            float firstengineOffset = (float)(engineToCoachOffset / splineFollower.spline.CalculateLength());
             // Calculate the offset percentage for each coach
-            if (i == 0)
-            {
-                offsetPercent = firstengineOffset;
-            }
-            else
-            {
-                offsetPercent = firstengineOffset + (float)(i * coachToCoachOffset / splineFollower.spline.CalculateLength());
-            }
+            float offsetDistance = engineToCoachOffset + i * coachToCoachOffset;
+            float offsetPercent = offsetDistance / splineLength;
 
-            // Calculate the position on the spline for each coach relative to the train
+            // Calculate the position on the spline for each coach
             float coachPosition = trainPosition - offsetPercent;
-            if (coachPosition < 0) coachPosition += 1; // Wrap around if necessary
+            if (coachPosition < 0) coachPosition += 1.0f; // Wrap around if necessary
 
             // Set the position of the coach on the spline
             SplineSample sample = new SplineSample();
             splineFollower.spline.Evaluate(coachPosition, ref sample);
-            coaches[i].transform.position = sample.position;
-            coaches[i].transform.rotation = sample.rotation;
+
+            // Smoothly interpolate the position and rotation with adjusted speed
+            float interpolationSpeed = 0.00001f; // Adjust this value as needed
+            coaches[i].transform.position = Vector3.Lerp(coaches[i].transform.position, sample.position, Time.deltaTime * interpolationSpeed);
+            coaches[i].transform.rotation = Quaternion.Slerp(coaches[i].transform.rotation, sample.rotation, Time.deltaTime * interpolationSpeed);
         }
     }
 }

@@ -8,7 +8,7 @@ public class PathNode : MonoBehaviour
 
     private void Start()
     {
-        Invoke(nameof(DelayedCall), 0.1f);
+        // Invoke(nameof(DelayedCall), 0.1f);
     }
 
     void OnDrawGizmos()

@@ -19,6 +19,7 @@ public class MI : MonoBehaviour
     public Train trainengine;
     public float detectionRadius = 1f;
 
+    public float distanceoffset;
     private void Update()
     {
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
@@ -27,7 +28,6 @@ public class MI : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             trainFollower.follow = false;
-            trainengine.isFollow = false;
             splinecomputer.SetPoints(new SplinePoint[0]);
             trainFollower.spline = null;
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, 1 << TrainLayer))
@@ -82,7 +82,6 @@ public class MI : MonoBehaviour
                 trainFollower.spline = splinecomputer;
                 trainFollower.SetDistance(0);
                 trainFollower.follow = true;
-                trainengine.isFollow = true;
             }
 
         }
@@ -90,6 +89,7 @@ public class MI : MonoBehaviour
         RaycastHit hit1;
         if (Input.GetMouseButton(0))
         {
+            trainengine.isFollow = true;
             if (isHeld)
             {
                 if (Physics.Raycast(ray, out hit1, Mathf.Infinity, 1 << TrackLayer))
@@ -120,7 +120,7 @@ public class MI : MonoBehaviour
 
                         if (!closestCollider.GetComponent<PathNode>().isActive)
                         {
-                            if (Vector3.Distance(closestCollider.transform.position, nodes[nodes.Count - 1].transform.position) < 1.1f)
+                            if (Vector3.Distance(closestCollider.transform.position, nodes[nodes.Count - 1].transform.position) < distanceoffset)
                             {
                                 if (!nodes.Exists(x => x == closestCollider.transform))
                                 {
@@ -135,7 +135,7 @@ public class MI : MonoBehaviour
                         {
                             if (nodes.Count > 1)
                             {
-                                if (Vector3.Distance(hit1.point, nodes[nodes.Count - 1].transform.position) > 1f)
+                                if (Vector3.Distance(hit1.point, nodes[nodes.Count - 1].transform.position) > distanceoffset)
                                 {
                                     nodes[nodes.Count - 1].gameObject.GetComponent<PathNode>().isActive = false;
                                     nodes[nodes.Count - 1].gameObject.GetComponent<MeshRenderer>().material = red;
